@@ -3,26 +3,15 @@ Import-Module CredentialManager
 Import-Module PSWindowsUpdate
 
 # Retrieve stored credentials
-$cred = Get-StoredCredential -Target '192.168.1.116'
+$cred = Get-StoredCredential -Target '192.168.1.168'
 
-# Define the server
-$server = "192.168.1.116"
-
-# Check for available updates
-Write-Host "Checking for available updates on $server..." -ForegroundColor Cyan
-$updates = Invoke-Command -ComputerName $server -Credential $cred -ScriptBlock {
-    Import-Module PSWindowsUpdate
-    Get-WindowsUpdate
-}
-
-if ($updates) {
-    Write-Host "Updates found, installing now..." -ForegroundColor Yellow
-    # Install available updates
-    Invoke-Command -ComputerName $server -Credential $cred -ScriptBlock {
+# Check if credentials are retrieved
+if ($cred) {
+    # Execute the Windows Update job on the remote server
+    Invoke-WUJob -ComputerName '192.168.1.168' -Credential $cred -Script {
         Import-Module PSWindowsUpdate
         Install-WindowsUpdate -AcceptAll -AutoReboot
-    }
-    Write-Host "Updates have been installed successfully." -ForegroundColor Green
+    } -Confirm:$false -RunNow
 } else {
-    Write-Host "No updates available at this time." -ForegroundColor Green
+    Write-Host "Credentials for 192.168.1.168 not found in Credential Manager." -ForegroundColor Red
 }
