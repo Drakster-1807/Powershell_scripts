@@ -1,16 +1,17 @@
-# Server IP or name
+# Indstillinger for serveren
 $server = "192.168.1.116"
+$username = "Administrator"  # Brug den korrekte brugernavn for serveren
+$password = "Kode1234!"   # Brug den korrekte adgangskode for serveren
 
-# Credentials (hardcoded)
-$username = "administrator"
+# Opret en PSCredential objekt
+$securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+$credential = New-Object System.Management.Automation.PSCredential($username, $securePassword)
 
-# Convert plain text password to secure string
-$password = ConvertTo-SecureString "Kode1234!" -AsPlainText -Force
+# Kommando til at genstarte serveren
+$restartCommand = "shutdown.exe /r /f /t 0"  # Genstart med det samme uden ventetid
 
-# Create PSCredential object
-$cred = New-Object System.Management.Automation.PSCredential ($username, $password)
-
-# Invoke the Restart-Computer command remotely
-Invoke-Command -ComputerName $server -Credential $cred -ScriptBlock {
-    Restart-Computer -Force
-}
+# Kør kommandoen på serveren via PowerShell Remoting
+Invoke-Command -ComputerName $server -Credential $credential -ScriptBlock {
+    param($cmd)
+    Invoke-Expression $cmd
+} -ArgumentList $restartCommand
