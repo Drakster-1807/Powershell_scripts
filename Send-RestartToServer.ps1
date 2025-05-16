@@ -1,7 +1,7 @@
-# Hent gemt legitimationsoplysninger
+# Hent oplysningerne til at logge ind privat
 $cred = Get-StoredCredential -Target '192.168.1.116'
 
-# Indstillinger for serveren
+# Connect til serveren
 $server = "192.168.1.116"
 
 # Kommando til at genstarte serveren
@@ -13,4 +13,4 @@ $response = Invoke-Command -ComputerName $server -Credential $cred -ScriptBlock 
     Invoke-Expression $cmd
 } -ArgumentList $restartCommand
 
-Write-Host $response;;;;;
+Write-Host $response;
