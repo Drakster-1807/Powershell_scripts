@@ -13,4 +13,4 @@ $response = Invoke-Command -ComputerName $server -Credential $cred -ScriptBlock 
     Invoke-Expression $cmd
 } -ArgumentList $restartCommand
 
-Write-Host $response;
+Write-Host $response;;;;;
