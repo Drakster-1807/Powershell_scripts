@@ -1,7 +1,9 @@
-*henter gemte informationer*
+ # henter gemte informationer#
 $cred = Get-StoredCredential -Target '192.168.1.116'
+
 $server = '192.168.1.116'
-*opdatering af gruppepolitikker på serveren*
+
+# opdatering af gruppepolitikker på serveren #
 Invoke-Command -ComputerName $server -Credential $cred -ScriptBlock {
     gpupdate /force
 }
