@@ -37,21 +37,3 @@ if ($cred) {
     Write-Host "❌ Credential '$credTarget' not found in Credential Manager." -ForegroundColor Red
     exit 1
 }
-
-# Check 4: Attempt test connection with credential
-Write-Host "`n[4] Testing remote PowerShell session..." -ForegroundColor Yellow
-$secPass = ConvertTo-SecureString $cred.Password -AsPlainText -Force
-$credential = New-Object System.Management.Automation.PSCredential ($cred.Username, $secPass)
-
-try {
-    $session = New-PSSession -ComputerName $server -Credential $credential -ErrorAction Stop
-    Invoke-Command -Session $session -ScriptBlock {
-        "✅ Remote PowerShell test command succeeded on $env:COMPUTERNAME."
-    }
-    Remove-PSSession $session
-} catch {
-    Write-Host "❌ Remote PowerShell session FAILED: $_" -ForegroundColor Red
-    Write-Host "👉 Troubleshoot: Check username, enable remoting, or try CredSSP authentication." -ForegroundColor Gray
-}
-
-Write-Host "`n✅ Diagnostic complete." -ForegroundColor Cyan
