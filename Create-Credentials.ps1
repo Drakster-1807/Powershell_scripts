@@ -1,5 +1,5 @@
-$Username = "UserNameHere"
-$Password = "PasswordHere"
+$Username = "DETFEDEHOLD0\Administrator"
+$Password = "Kode1234!"
 
 # Convert plain text password to secure string
 $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
